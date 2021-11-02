@@ -1,0 +1,64 @@
+#!/bin/bash
+
+version_str=$(grep "version" Cargo.toml | head -1)
+
+[[ $version_str =~ ([0-9]+\.[0-9]+\.[0-9]+) ]]
+
+version="${BASH_REMATCH[1]}"
+
+cargo build --release
+
+if [ $? -eq 0 ]
+then
+
+    if [ ! -d "./fan-service-$version" ]
+    then
+        mkdir "./fan-service-$version"
+    fi
+
+    if [ ! -d "./fan-service-$version/usr/bin" ] 
+    then 
+        mkdir -p "./fan-service-$version/usr/bin"
+    fi
+
+    if [ -f "./fan-service-$version/usr/bin/fan-service" ] 
+    then 
+        rm "./fan-service-$version/usr/bin/fan-service"
+    fi
+
+    cp ./target/release/fan-service "./fan-service-$version/usr/bin/fan-service"
+
+    if [ ! -d "./fan-service-$version/etc/fan-service" ] 
+    then
+        mkdir -p "./fan-service-$version/etc/fan-service"
+    fi
+
+    if [ ! -d "./fan-service-$version/DEBIAN" ]
+    then
+        mkdir "./fan-service-$version/DEBIAN"
+    fi
+
+    if [ -f "./fan-service-$version/DEBIAN/control" ]
+    then
+        rm "./fan-service-$version/DEBIAN/control"
+    fi
+
+    cp ./deploy/control "./fan-service-$version/DEBIAN/control"
+
+    sed -i "s/{{version}}/$version/" "./fan-service-$version/DEBIAN/control"
+
+    if [ ! -d "./fan-service-$version/etc/systemd/system" ]
+    then
+        mkdir -p "./fan-service-$version/etc/systemd/system"
+    fi
+
+    if [ -f "./fan-service-$version/etc/systemd/system/fan.service" ]
+    then
+        rm "./fan-service-$version/etc/systemd/system/fan.service"
+    fi
+
+    cp ./deploy/fan.service "./fan-service-$version/etc/systemd/system/fan.service"
+
+    dpkg-deb --build "fan-service-$version"
+
+fi

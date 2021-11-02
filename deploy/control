@@ -1,0 +1,10 @@
+Package: fan-service
+Version: {{version}}
+Section: base
+Priority: optional
+Architecture: arm
+Maintainer: Tom Sievers <tom.sievers13@gmail.com>
+Description: A simple fan service
+ Controls a pwm fan based on cpu temperature using the Raspberry Pi GPIO.
+ Fan curve can be changed in the settings file located in /etc/fan-service/settings.toml.
+ 

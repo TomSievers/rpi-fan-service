@@ -33,6 +33,13 @@ then
         mkdir -p "./fan-service-$version/etc/fan-service"
     fi
 
+    if [ -f "./fan-service-$version/etc/fan-service/settings.toml" ] 
+    then 
+        rm "./fan-service-$version/etc/fan-service/settings.toml"
+    fi
+
+    cp ./settings.toml "./fan-service-$version/etc/fan-service/settings.toml"
+
     if [ ! -d "./fan-service-$version/DEBIAN" ]
     then
         mkdir "./fan-service-$version/DEBIAN"

@@ -1,3 +1,12 @@
 [package]
 name = "fan-service"
 version = "0.1.0"
+
+[dependencies]
+rppal = "0.13.0"
+toml = "0.5.8"
+regex = "1.5.4"
+serde = { version = "1.0.130", features = ["derive"] }
+syslog = "5.0.0"
+log = "0.4.14"
+exitcode = "1.1.2"

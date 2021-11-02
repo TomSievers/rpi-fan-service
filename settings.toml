@@ -1,0 +1,15 @@
+[fan]
+pin = 0
+update_rate = 200
+
+[[fan.curve]]
+percentage = 0
+temperature = 0
+
+[[fan.curve]]
+percentage = 25
+temperature = 50
+
+[[fan.curve]]
+percentage = 100
+temperature = 100

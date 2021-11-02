@@ -1,0 +1,4 @@
+.vscode
+fan-service-*
+target
+Cargo.lock

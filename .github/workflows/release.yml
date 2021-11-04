@@ -22,7 +22,7 @@ jobs:
         echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       shell: bash
     - name: Set version
-      run: sed -i -E "1,/version/ s/version.+/version = \"${{ steps.get_version.outputs.VERSION }}\"/g" Cargo.toml
+      run: sed -i -E "1,/version/ s/version.+/version = \"[[ ${{ steps.get_version.outputs.VERSION }} =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] then ${BASH_REMATCH[1]} \"/g" Cargo.toml
       shell: bash
     - name: Build
       run: ./create-deb

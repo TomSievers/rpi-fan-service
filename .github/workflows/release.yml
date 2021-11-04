@@ -14,5 +14,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Setup
+      run: rustup target add arm-unknown-linux-gnueabihf
+    - name: Get version
+      id: get_version
+      run: |
+        echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      shell: bash
+    - name: Set version
+      run: sed -i -E "1,/version/ s/version.+/version = \"${{ steps.get_version.outputs.VERSION }}\"/g" Cargo.toml
+      shell: bash
     - name: Build
-      run: cargo build --target arm-unknown-linux-gnueabihf --verbose
+      run: ./create-deb
+      shell: bash
+    - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        with:
+          upload_url: ${{ steps.update_release.outputs.upload_url }}
+          asset_path: ./bin/post_twitter_on_work${{ matrix.asset_name_suffix }}
+          asset_name: fan-service-${{ steps.get_version.outputs.VERSION }}.deb
+          asset_content_type: ${{ matrix.asset_content_type }}

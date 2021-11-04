@@ -25,7 +25,8 @@ jobs:
       run: sed -i -E "1,/version/ s/version.+/version = \"${{ steps.get_version.outputs.VERSION }}\"/g" Cargo.toml
       shell: bash
     - name: Build
-      run: ./create-deb
+      run: |
+        ./create-deb
       shell: bash
     - name: Upload Release Asset
         uses: actions/upload-release-asset@v1

@@ -27,3 +27,12 @@ jobs:
     - name: Build
       run: ./create-deb
       shell: bash
+    - name: Upload Release Asset
+        uses: actions/upload-release-asset@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        with:
+          upload_url: ${{ steps.update_release.outputs.upload_url }}
+          asset_path: ./bin/post_twitter_on_work${{ matrix.asset_name_suffix }}
+          asset_name: fan-service-${{ steps.get_version.outputs.VERSION }}.deb
+          asset_content_type: ${{ matrix.asset_content_type }}
